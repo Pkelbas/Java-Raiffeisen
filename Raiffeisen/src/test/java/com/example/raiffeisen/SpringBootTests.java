@@ -1,9 +1,9 @@
 package com.example.raiffeisen;
 
 import com.example.raiffeisen.abstractions.AccountService;
-import com.example.raiffeisen.exceptions.AccountAcessDeniedException;
+import com.example.raiffeisen.exceptions.AccountAccessDeniedException;
 import com.example.raiffeisen.exceptions.AccountNotFoundException;
-import com.example.raiffeisen.exceptions.InsufficentFundsException;
+import com.example.raiffeisen.exceptions.InsufficientFundsException;
 import com.example.raiffeisen.models.AccountDto;
 import com.example.raiffeisen.security.user.Role;
 import com.example.raiffeisen.security.user.User;
@@ -20,7 +20,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 
 
-
 @SpringBootTest
 public class SpringBootTests {
 
@@ -30,7 +29,7 @@ public class SpringBootTests {
   private static final double epsilon = 0.00001d;
 
   @BeforeEach
-  public void setUp(){
+  public void setUp() {
     User user = User.builder().id(999).role(Role.USER).username("test").password("test").build();
     Authentication authentication = Mockito.mock(Authentication.class);
     Mockito.when(authentication.getPrincipal()).thenReturn(user);
@@ -39,7 +38,7 @@ public class SpringBootTests {
 
 
   @AfterEach
-  public void tearDown(){
+  public void tearDown() {
     SecurityContextHolder.clearContext();
   }
 
@@ -73,7 +72,6 @@ public class SpringBootTests {
   @Test()
   @Transactional
   public void testUpdateBalance_AccountNotFound() {
-    String bankName = "Test Bank";
 
     Double sum = 20.0;
 
@@ -82,7 +80,7 @@ public class SpringBootTests {
 
   @Test
   @Transactional
-  public void testUpdateBalance_AccountDenied(){
+  public void testUpdateBalance_AccountDenied() {
     String bankName = "Test Bank";
 
     AccountDto accountDto = service.createAccount(bankName);
@@ -94,27 +92,26 @@ public class SpringBootTests {
 
     Double sum = 20.0;
 
-    Assertions.assertThrows(AccountAcessDeniedException.class, () -> service.updateBalance(
+    Assertions.assertThrows(AccountAccessDeniedException.class, () -> service.updateBalance(
         accountDto.getId(), sum));
   }
 
   @Test
   @Transactional
-  public void testUpdateBalance_InsufficentFunds(){
+  public void testUpdateBalance_InsufficientFunds() {
     String bankName = "Test Bank";
 
     Double sum = -20.0;
     AccountDto accountDto = service.createAccount(bankName);
 
-
-    Assertions.assertThrows(InsufficentFundsException.class, () -> service.updateBalance(
+    Assertions.assertThrows(InsufficientFundsException.class, () -> service.updateBalance(
         accountDto.getId(), sum));
 
   }
 
   @Test
   @Transactional
-  public void testFindAccount_AccountFound(){
+  public void testFindAccount_AccountFound() {
     String bankName = "Test Bank";
 
     AccountDto accountDto = service.createAccount(bankName);
@@ -126,7 +123,7 @@ public class SpringBootTests {
 
   @Test
   @Transactional
-  public void testFindAccount_AccountNotFound(){
+  public void testFindAccount_AccountNotFound() {
 
     Assertions.assertThrows(AccountNotFoundException.class, () -> service.findAccount(1000));
   }
@@ -134,7 +131,7 @@ public class SpringBootTests {
 
   @Test
   @Transactional
-  public void testFindAccount_AccountDenied(){
+  public void testFindAccount_AccountDenied() {
     String bankName = "Test Bank";
 
     AccountDto accountDto = service.createAccount(bankName);
@@ -144,31 +141,32 @@ public class SpringBootTests {
     Mockito.when(authentication.getPrincipal()).thenReturn(user);
     SecurityContextHolder.getContext().setAuthentication(authentication);
 
-
-    Assertions.assertThrows(AccountAcessDeniedException.class, () -> service.findAccount(accountDto.getId()));
+    Assertions.assertThrows(AccountAccessDeniedException.class,
+        () -> service.findAccount(accountDto.getId()));
   }
 
   @Test
   @Transactional
-  public void testDeleteAccount_DeleteSuccessful(){
+  public void testDeleteAccount_DeleteSuccessful() {
     String bankName = "Test Bank";
 
     AccountDto accountDto = service.createAccount(bankName);
 
     service.deleteAccount(accountDto.getId());
 
-    Assertions.assertThrows(AccountNotFoundException.class, () -> service.findAccount(accountDto.getId()));
+    Assertions.assertThrows(AccountNotFoundException.class,
+        () -> service.findAccount(accountDto.getId()));
   }
 
   @Test
   @Transactional
-  public void testDeleteAccount_AccountNotFound(){
+  public void testDeleteAccount_AccountNotFound() {
     Assertions.assertThrows(AccountNotFoundException.class, () -> service.deleteAccount(1000));
   }
 
   @Test
   @Transactional
-  public void testDeleteAccount_AccountDenied(){
+  public void testDeleteAccount_AccountDenied() {
     String bankName = "Test Bank";
 
     AccountDto accountDto = service.createAccount(bankName);
@@ -178,13 +176,13 @@ public class SpringBootTests {
     Mockito.when(authentication.getPrincipal()).thenReturn(user);
     SecurityContextHolder.getContext().setAuthentication(authentication);
 
-    Assertions.assertThrows(AccountAcessDeniedException.class, () -> service.deleteAccount(
+    Assertions.assertThrows(AccountAccessDeniedException.class, () -> service.deleteAccount(
         accountDto.getId()));
   }
 
   @Test
   @Transactional
-  public void testGetAllAccounts_Successful(){
+  public void testGetAllAccounts_Successful() {
     String bankName = "Test Bank";
     AccountDto accountDto = service.createAccount(bankName);
     AccountDto accountDto2 = service.createAccount(bankName);
@@ -198,7 +196,7 @@ public class SpringBootTests {
 
   @Test
   @Transactional
-  public void testGetAllAccountsWithBalanceGreaterThanZero_Successful(){
+  public void testGetAllAccountsWithBalanceGreaterThanZero_Successful() {
     String bankName = "Test Bank";
     AccountDto accountDto = service.createAccount(bankName);
     AccountDto accountDto2 = service.createAccount(bankName);
@@ -211,7 +209,7 @@ public class SpringBootTests {
 
   @Test
   @Transactional
-  public void testGetAllAccountsWithBank(){
+  public void testGetAllAccountsWithBank() {
     String bankName = "Test Bank";
     AccountDto accountDto = service.createAccount(bankName);
     AccountDto accountDto2 = service.createAccount(bankName);
@@ -221,7 +219,6 @@ public class SpringBootTests {
     Assertions.assertEquals(accountDto, result.get(0));
     Assertions.assertEquals(accountDto2, result.get(1));
   }
-
 
 
 }

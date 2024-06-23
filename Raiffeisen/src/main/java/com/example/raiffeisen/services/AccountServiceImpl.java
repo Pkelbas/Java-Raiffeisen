@@ -2,9 +2,9 @@ package com.example.raiffeisen.services;
 
 import com.example.raiffeisen.abstractions.AccountService;
 import com.example.raiffeisen.entities.Account;
-import com.example.raiffeisen.exceptions.AccountAcessDeniedException;
+import com.example.raiffeisen.exceptions.AccountAccessDeniedException;
 import com.example.raiffeisen.exceptions.AccountNotFoundException;
-import com.example.raiffeisen.exceptions.InsufficentFundsException;
+import com.example.raiffeisen.exceptions.InsufficientFundsException;
 import com.example.raiffeisen.models.AccountDto;
 import com.example.raiffeisen.repositories.AccountRepository;
 import com.example.raiffeisen.security.user.User;
@@ -42,13 +42,13 @@ public class AccountServiceImpl implements AccountService {
         .orElseThrow(
             () -> new AccountNotFoundException("No account by this account id: " + accountId.toString()));
     if (!account.getUserId().equals(id)) {
-      throw new AccountAcessDeniedException(
+      throw new AccountAccessDeniedException(
           "This user: " + user.getUsername() + " lacks the right to use account with id: " + accountId.toString());
     }
 
     if (account.getBalance() + sum < epsilon) {
-      throw new InsufficentFundsException(
-          "Balance in account: " + accountId.toString() + " insufficent to make a withdrawl of sum: "
+      throw new InsufficientFundsException(
+          "Balance in account: " + accountId.toString() + " insufficient to make a withdrawal of sum: "
               + sum.toString());
     }
     account.setBalance(account.getBalance() + sum);
@@ -62,7 +62,7 @@ public class AccountServiceImpl implements AccountService {
         .orElseThrow(
             () -> new AccountNotFoundException("No account by this account id: " + accountId.toString()));
     if (!account.getUserId().equals(id)) {
-      throw new AccountAcessDeniedException(
+      throw new AccountAccessDeniedException(
           "This user: " + user.getUsername() + " lacks the right to use account with id: " + accountId.toString());
     }
     return account.toDto();
@@ -75,7 +75,7 @@ public class AccountServiceImpl implements AccountService {
         .orElseThrow(
             () -> new AccountNotFoundException("No account by this account id: " + accountId.toString()));
     if (!account.getUserId().equals(id)) {
-      throw new AccountAcessDeniedException(
+      throw new AccountAccessDeniedException(
           "This user: " + user.getUsername() + " lacks the right to use account with id: " + accountId.toString());
     }
     accountRepository.delete(account);

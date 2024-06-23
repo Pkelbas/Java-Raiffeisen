@@ -1,13 +1,12 @@
 package com.example.raiffeisen.exceptions;
 
-
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(HttpStatus.BAD_REQUEST)
-public class InsufficentFundsException extends RuntimeException {
+@ResponseStatus(HttpStatus.FORBIDDEN)
+public class AccountAccessDeniedException extends RuntimeException {
 
-  public InsufficentFundsException(String message) {
+  public AccountAccessDeniedException(String message) {
     super(message);
   }
 

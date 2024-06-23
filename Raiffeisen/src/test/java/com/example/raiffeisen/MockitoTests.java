@@ -2,9 +2,9 @@ package com.example.raiffeisen;
 
 
 import com.example.raiffeisen.entities.Account;
-import com.example.raiffeisen.exceptions.AccountAcessDeniedException;
+import com.example.raiffeisen.exceptions.AccountAccessDeniedException;
 import com.example.raiffeisen.exceptions.AccountNotFoundException;
-import com.example.raiffeisen.exceptions.InsufficentFundsException;
+import com.example.raiffeisen.exceptions.InsufficientFundsException;
 import com.example.raiffeisen.models.AccountDto;
 import com.example.raiffeisen.repositories.AccountRepository;
 import com.example.raiffeisen.security.user.Role;
@@ -92,13 +92,6 @@ class MockitoTests {
 
   @Test()
   public void testUpdateBalance_AccountNotFound() {
-    String bankName = "Test Bank";
-    Double balance = 80.0;
-    Account account = Account.builder()
-        .userId(1)
-        .bankName(bankName)
-        .balance(balance)
-        .build();
 
     Double sum = 20.0;
 
@@ -121,7 +114,7 @@ class MockitoTests {
 
     Mockito.when(accountRepository.findById(1)).thenReturn(Optional.of(account));
 
-    Assertions.assertThrows(AccountAcessDeniedException.class, () -> service.updateBalance(1, sum));
+    Assertions.assertThrows(AccountAccessDeniedException.class, () -> service.updateBalance(1, sum));
   }
 
   @Test
@@ -138,7 +131,7 @@ class MockitoTests {
     Double sum = -200.0;
 
 
-    Assertions.assertThrows(InsufficentFundsException.class, () -> service.updateBalance(1, sum));
+    Assertions.assertThrows(InsufficientFundsException.class, () -> service.updateBalance(1, sum));
 
   }
 
@@ -163,13 +156,6 @@ class MockitoTests {
 
   @Test
   public void testFindAccount_AccountNotFound(){
-    String bankName = "Test Bank";
-    Double balance = 80.0;
-    Account account = Account.builder()
-        .userId(1)
-        .bankName(bankName)
-        .balance(balance)
-        .build();
 
     Mockito.when(accountRepository.findById(1)).thenReturn(Optional.empty());
 
@@ -189,7 +175,7 @@ class MockitoTests {
 
     Mockito.when(accountRepository.findById(1)).thenReturn(Optional.of(account));
 
-    Assertions.assertThrows(AccountAcessDeniedException.class, () -> service.findAccount(1));
+    Assertions.assertThrows(AccountAccessDeniedException.class, () -> service.findAccount(1));
   }
 
   @Test
@@ -210,14 +196,6 @@ class MockitoTests {
 
   @Test
   public void testDeleteAccount_AccountNotFound(){
-    String bankName = "Test Bank";
-    Double balance = 80.0;
-    Account account = Account.builder()
-        .userId(1)
-        .bankName(bankName)
-        .balance(balance)
-        .build();
-
     Mockito.when(accountRepository.findById(1)).thenReturn(Optional.empty());
 
     Assertions.assertThrows(AccountNotFoundException.class, () -> service.deleteAccount(1));
@@ -235,7 +213,7 @@ class MockitoTests {
 
     Mockito.when(accountRepository.findById(1)).thenReturn(Optional.of(account));
 
-    Assertions.assertThrows(AccountAcessDeniedException.class, () -> service.deleteAccount(1));
+    Assertions.assertThrows(AccountAccessDeniedException.class, () -> service.deleteAccount(1));
   }
 
 
